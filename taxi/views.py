@@ -1,5 +1,3 @@
-from tkinter import NO
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -39,7 +37,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context =  super(ManufacturerListView, self).get_context_data(**kwargs)
+        context = super(ManufacturerListView, self).get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         context["search_form"] = ManufacturersSearchForm(
             initial={
@@ -47,7 +45,7 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
             }
         )
         return context
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         form = ManufacturersSearchForm(self.request.GET)
@@ -86,7 +84,7 @@ class CarListView(LoginRequiredMixin, generic.ListView):
             }
         )
         return context
-    
+
     def get_queryset(self):
         queryset = Car.objects.select_related("manufacturer")
         form = CarsSearchForm(self.request.GET)
@@ -129,14 +127,15 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
             }
         )
         return context
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         form = DriversSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(username__icontains=form.cleaned_data["username"])
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
         return queryset
-
 
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):

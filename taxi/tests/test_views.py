@@ -1,5 +1,3 @@
-from urllib import response
-
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -8,31 +6,30 @@ from taxi.models import Car, Manufacturer
 
 DRIVERS_URL = reverse("taxi:driver-list")
 CARS_URL = reverse("taxi:car-list")
-CAR_DETAIL_URL = reverse("taxi:car-detail", args=(1,))
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
 
 class PublicDriversTest(TestCase):
-    def login_required(self):
+    def test_login_required(self):
         res = self.client.get(DRIVERS_URL)
         self.assertNotEqual(res.status_code, 200)
 
-    def login_detail_required(self):
+    def test_login_detail_required(self):
         res = self.client.get(reverse("taxi:driver-detail", args=(1,)))
         self.assertNotEqual(res.status_code, 200)
 
 
 class PublicCarTest(TestCase):
-    def login_required(self):
+    def test_login_required(self):
         res = self.client.get(CARS_URL)
         self.assertNotEqual(res.status_code, 200)
 
-    def login_detail_required(self):
-        res = self.client.get(CAR_DETAIL_URL)
+    def test_login_detail_required(self):
+        res = self.client.get(reverse("taxi:car-detail", args=(1,)))
         self.assertNotEqual(res.status_code, 200)
 
 
-class PublicCarTest(TestCase):
+class PublicManufacturerTest(TestCase):
     def login_required(self):
         res = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(res.status_code, 200)
@@ -58,7 +55,9 @@ class PrivateDriversTest(TestCase):
         )
 
     def test_retrive_driver_detail(self):
-        response = self.client.get(reverse("taxi:driver-detail", args=(self.user.pk,)))
+        response = self.client.get(
+            reverse("taxi:driver-detail", args=(self.user.pk,))
+        )
         driver = get_user_model().objects.get(pk=self.user.pk,)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -96,11 +95,12 @@ class PrivateCarsTest(TestCase):
         )
 
     def test_retrive_car_detail(self):
-        response = self.client.get(reverse("taxi:car-detail", args=(self.car.pk,)))
+        response = self.client.get(
+            reverse("taxi:car-detail", args=(self.car.pk,))
+        )
         car = Car.objects.get(id=self.car.pk)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.context["car"],
             car
         )
-
