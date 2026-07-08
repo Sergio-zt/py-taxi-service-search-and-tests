@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from taxi.models import Manufacturer, Car
 
+
 class DriverSearchTests(TestCase):
     def setUp(self):
         self.url = reverse("taxi:driver-list")
@@ -26,13 +27,13 @@ class DriverSearchTests(TestCase):
         response = self.client.get(self.url, {"username": "speedy"})
         self.assertEqual(response.status_code, 200)
         driver_list = response.context["driver_list"]
-        
+
         self.assertIn(self.matching_driver, driver_list)
         self.assertNotIn(self.other_driver, driver_list)
 
     def test_search_with_no_results(self):
         response = self.client.get(self.url, {"username": "non_existent_user"})
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["driver_list"]), 0)
 
@@ -63,12 +64,12 @@ class CarSearchTests(TestCase):
         response = self.client.get(self.url, {"model": self.model})
         self.assertEqual(response.status_code, 200)
         car_list = response.context["car_list"]
-        
+
         self.assertIn(self.car, car_list)
 
     def test_search_with_no_results(self):
         response = self.client.get(self.url, {"model": "non_existent_model"})
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["car_list"]), 0)
 
@@ -96,11 +97,11 @@ class ManufacturerSearchTests(TestCase):
         response = self.client.get(self.url, {"name": self.name})
         self.assertEqual(response.status_code, 200)
         manufacturer_list = response.context["manufacturer_list"]
-        
+
         self.assertIn(self.manufacturer, manufacturer_list)
 
     def test_search_with_no_results(self):
         response = self.client.get(self.url, {"name": "non_existent_name"})
-        
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["manufacturer_list"]), 0)
