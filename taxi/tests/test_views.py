@@ -30,7 +30,7 @@ class PublicCarTest(TestCase):
 
 
 class PublicManufacturerTest(TestCase):
-    def login_required(self):
+    def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
         self.assertNotEqual(res.status_code, 200)
 

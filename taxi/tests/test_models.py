@@ -51,7 +51,7 @@ class ModelsTests(TestCase):
     def test_create_driver_license(self):
         username = "test_user"
         password = "test_password"
-        license_num = "ASD12345"
+        license_num = "ASD11111"
 
         driver = get_user_model().objects.create_user(
             username=username,
